@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PayPal Clone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f6f7fb;
+    }
+    .header {
+      background-color: #003087;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header .logo {
+      font-weight: 600;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      text-align: center;
+    }
+    .header .logo img {
+      width: 24px;
+      height: 24px;
+      margin-right: 0.5rem;
+    }
+    .header .notifications {
+      position: relative;
+    }
+    .notification-count {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.75rem;
+    }
+    .quick-access, .money-section {
+      padding: 1rem;
+    }
+    .quick-access h2, .money-section h2 {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .quick-actions {
+      display: flex;
+      gap: 1rem;
+    }
+    .quick-action {
+      background: white;
+      padding: 0.75rem;
+      border-radius: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+      flex: 1;
+    }
+    .quick-action img {
+      width: 40px;
+      height: 40px;
+    }
+    .money-box {
+      background: white;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .money-box .amount {
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    .money-box .currency-details {
+      margin-top: 1rem;
+      background: #f0f0f0;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+    }
+    .currency-details div {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.25rem 0;
+    }
+    .currency-details img {
+      width: 20px;
+      margin-right: 0.5rem;
+    }
+    .feedback-tab {
+      position: fixed;
+      right: 0;
+      top: 50%;
+      background: #003087;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem 0 0 0.5rem;
+      transform: translateY(-50%);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+    .estimate-text {
+      font-size: 0.875rem;
+      color: #6c757d;
+      margin-top: 0.5rem;
+      display: block;
+      padding: 0 1rem;
+    }
+    .flag-icon {
+      width: 24px;
+      height: 16px;
+      object-fit: cover;
+      margin-right: 0.5rem;
+    }
+    .tab-bar {
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 0.5rem;
+      background-color: white;
+      font-weight: 600;
+      color: #333;
+    }
+    .tab-bar span {
+      font-size: 1rem;
+    }
+    .tab-bar .active {
+      color: black;
+      border-bottom: 2px solid black;
+    }
+    .more-ways-section {
+  margin-top: 1.5rem;
+  padding: 0 0.5rem; /* reduce left and right padding */
+}
+    .more-ways-section h2 {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .more-ways {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: #f8f9fa; /* lighter background */
+  border: 1px solid #e0e0e0; /* subtle border */
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* lighter shadow */
+  transition: box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.more-ways:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* hover effect */
+}
+.more-ways img {
+  width: 32px;
+  height: 32px;
+  margin-right: 0.75rem;
+}
+
+.more-ways-text strong {
+  font-size: 0.95rem;
+  color: #003087;
+}
+
+.more-ways-text span {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+.loader {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.loader-circle {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #003087;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.send-button-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  padding: 1rem;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+}
+
+.send-button {
+  width: 90%;
+  margin: 0 auto; /* Center the button */
+  background-color: #000;
+  color: white;
+  border: none;
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+
+.send-button:hover {
+  background-color: #333;
+}
+.send-button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+     #recipientInput:focus {
+  outline: none;
+  border-color: #0059ff; /* PayPal blue */
+  box-shadow: 0 0 0 2px rgba(0, 89, 255, 0.3); /* subtle blue glow */
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #003087;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto;
+}
+
+  @keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+<style>
+  @keyframes slideUp {
+    from {
+      transform: translateY(80px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .slide-up {
+    animation: slideUp 0.4s ease-out forwards;
+  }
+</style>
+
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <img src="https://paypalweb-1yplbbn18-freeworldfghjhjkjkjghjgkdz.vercel.app/assets/images/pp-fv.svg" alt="Logo">
+      <span style="color: lightgray; margin-left: 0.5rem;">Stevee23</span>
+    </div>
+    <div class="notifications">
+      <span class="notification-count">99</span>
+      <span>🔔</span>
+    </div>
+  </div>
+
+  <div class="quick-access">
+    <h2>Quick Access</h2>
+    <div class="quick-actions">
+      <div class="quick-action">
+        <img src="send.png" alt="Send" />
+        <div>Send money</div>
+      </div>
+      <div class="quick-action">
+        <img src="request.png" alt="Link" />
+        <div>Request Money</div>
+      </div>
+      <div class="quick-action">
+        <img src="oni.png" alt="Cart" />
+        <div>Online checkout</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="money-section">
+    <h2>Money</h2>
+    <div class="money-box">
+      <div class="amount">$347,231,233.86 USD*</div>
+      <div>Available balance</div>
+      <div class="currency-details">
+        <div><span><img class="flag-icon" src="https://flagcdn.com/us.svg" alt="USA Flag" /></span> <span>$237782.86 USD</span></div>
+        <div><span><img class="flag-icon" src="https://flagcdn.com/eu.svg" alt="EU Flag" /></span> <span>€34334.45 EUR</span></div>
+      </div>
+    </div>
+    <span class="estimate-text">* This amount is an estimate based on the most recent currency conversion rate.</span>
+  </div>
+
+  <div id="sendMoneyScreen" style="display:none; padding: 1rem; background-color: white;">
+    <div class="tab-bar">
+      <span class="active">Send</span>
+      <span>Request</span>
+      <span>Contacts</span>
+      <span>➡️</span>
+    </div>
+
+    <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Send money</h2>
+
+<input type="text" id="recipientInput" placeholder="Name, username, email, mobile"
+  style="
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 999px;
+    border: 1px solid #ccc;
+    font-weight: 545;
+    box-sizing: border-box;
+    font-size: 1rem;
+  " oninput="showSuggestions()" />
+
+<ul id="suggestionsList" style="list-style: none; padding: 0.5rem 1rem; background: white; border: 1px solid #ccc; border-radius: 8px; margin-top: 0.25rem; display: none;"></ul>
+
+
+    <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+      <a href="#" style="color: #003087; font-weight: 600;">Show all contacts</a>
+      <span style="font-size: 1.25rem;">➡️</span>
+    </div>
+
+    <div class="more-ways-section">
+      <h2>More ways to send</h2>
+      <div class="more-ways">
+        <img src="4344623-200.png" alt="Invoice Icon" />
+        <div class="more-ways-text">
+          <strong>Send an invoice</strong>
+          <span>Customize, track, and send invoices.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sendMoneyButtonWrapper" class="send-button-wrapper" style="display: none;">
+  <button class="send-button" disabled>Send Money</button>
+</div>
+
+
+
+  <div class="feedback-tab">Feedback</div>
+
+<div id="fullScreenLoader" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+">
+  <div class="loader-circle" style="
+    width: 48px;
+    height: 48px;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #003087;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  "></div>
+</div>
+
+  <div id="finalScreen" style="display: none; padding: 1.5rem; background-color: white; font-family: 'Inter', sans-serif;">
+  <!-- Avatar and email -->
+  <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+    <img src="https://paypalweb-1yplbbn18-freeworldfghjhjkjkjghjgkdz.vercel.app/assets/images/user.svg" alt="User Avatar" style="width: 48px; height: 48px; border-radius: 50%; margin-right: 1rem;">
+    <div style="font-weight: 600; font-size: 1.2rem;">editora581@gmail.com</div>
+  </div>
+
+  <!-- Amount input with $ symbol -->
+  <div style="display: flex; align-items: center; font-size: 2.2rem; font-weight: 600; margin-bottom: 1rem;">
+    <span style="margin-right: 0.25rem;">$</span>
+    <input
+      id="amountInput"
+      type="text"
+      placeholder="0.00"
+      inputmode="decimal"
+      style="
+        font-size: 2.2rem;
+        font-weight: 600;
+        border: none;
+        outline: none;
+        background: transparent;
+        width: 100%;
+      "
+    />
+    <select style="
+      font-size: 1rem;
+      padding: 0.25rem 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background-color: white;
+      margin-left: 0.5rem;
+    ">
+      <option>USD</option>
+      <option>EUR</option>
+      <option>INR</option>
+    </select>
+  </div>
+
+  <!-- Optional note input -->
+  <input type="text" placeholder="What’s this for?" style="
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-sizing: border-box;
+  ">
+
+  <!-- User agreement note -->
+  <p style="font-size: 0.875rem; margin-top: 1rem; color: #333;">
+    For more information please read our
+    <a href="#" style="color: #003087; text-decoration: none; font-weight: 500;">user agreement</a>.
+  </p>
+
+  <!-- Next button -->
+  <button id="nextButton" disabled style="
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #f1f1f1;
+    color: #999;
+    border: none;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: not-allowed;
+  ">
+    Next
+  </button>
+
+  <!-- Cancel link -->
+  <div style="text-align: center; margin-top: 1rem;">
+    <a href="#" style="color: #003087; font-weight: 500; text-decoration: none;">Cancel</a>
+  </div>
+
+  <!-- Footer -->
+  <div style="display: flex; justify-content: space-around; font-size: 0.875rem; margin-top: 2rem; color: #777;">
+    <span>Help</span>
+    <span>Contact</span>
+    <span>Fees</span>
+    <span>Security</span>
+  </div>
+</div>
+<!-- Full screen loader -->
+<div id="fullScreenLoader" style="
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.85);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+">
+  <div style="
+    width: 48px;
+    height: 48px;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #003087;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  "></div>
+</div>
+
+<style>
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+<script>
+  const amountInput = document.getElementById('amountInput');
+  const nextButton = document.getElementById('nextButton');
+  const fullScreenLoader = document.getElementById('fullScreenLoader');
+
+  // Enable Next button when amount is valid
+  amountInput.addEventListener('input', () => {
+    const value = parseFloat(amountInput.value);
+    if (!isNaN(value) && value > 0) {
+      nextButton.disabled = false;
+      nextButton.style.backgroundColor = '#003087';
+      nextButton.style.color = 'white';
+      nextButton.style.cursor = 'pointer';
+    } else {
+      nextButton.disabled = true;
+      nextButton.style.backgroundColor = '#f1f1f1';
+      nextButton.style.color = '#999';
+      nextButton.style.cursor = 'not-allowed';
+    }
+  });
+
+  // Show loading spinner when Next is clicked
+  nextButton.addEventListener('click', () => {
+  const amount = amountInput.value.trim();
+  const recipient = input.value.trim();
+  const email = recipient.includes('@') ? recipient : `${recipient}@gmail.com`;
+
+  fullScreenLoader.style.display = 'flex';
+
+  setTimeout(() => {
+    fullScreenLoader.style.display = 'none';
+
+    const confirmationModal = document.createElement('div');
+    confirmationModal.innerHTML = `
+      <div style="
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+      ">
+        <div style="
+          background: white;
+          padding: 2rem;
+          border-radius: 1rem;
+          max-width: 90%;
+          width: 400px;
+          text-align: center;
+          font-family: 'Inter', sans-serif;
+        ">
+          <img src="https://paypalweb-1yplbbn18-freeworldfghjhjkjkjghjgkdz.vercel.app/assets/images/user.svg" alt="User Avatar" style="width: 64px; height: 64px; border-radius: 50%; margin-bottom: 1rem;">
+          <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Payment Sent</h2>
+          <p style="margin-bottom: 1.5rem; font-size: 1.1rem; line-height: 1.6;">
+            You've just sent <strong>$ ${amount}</strong> to <strong>${email}</strong>
+          </p>
+          <button style="
+            background-color: #003087;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 999px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+          " onclick="location.reload()">Done</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(confirmationModal);
+  }, 3000);
+});
+
+</script>
+
+
+  <script>
+    const sendMoneyBtn = document.querySelector('.quick-action img[alt="Send"]');
+    const sendMoneyScreen = document.getElementById('sendMoneyScreen');
+    const moneySection = document.querySelector('.money-section');
+    const quickAccess = document.querySelector('.quick-access');
+
+    sendMoneyBtn.parentElement.addEventListener('click', () => {
+  quickAccess.style.display = 'none';
+  moneySection.style.display = 'none';
+  sendMoneyScreen.style.display = 'block';
+  document.getElementById('sendMoneyButtonWrapper').style.display = 'block';
+});
+
+  </script>
+
+ <script>
+  const avatars = [
+    'https://paypalweb-1yplbbn18-freeworldfghjhjkjkjghjgkdz.vercel.app/assets/images/user.svg'
+  ];
+
+  const input = document.getElementById('recipientInput');
+  const suggestionsList = document.getElementById('suggestionsList');
+
+  function getRandomAvatar() {
+    return avatars[Math.floor(Math.random() * avatars.length)];
+  }
+
+  function createSuggestionItem(text) {
+    const li = document.createElement('li');
+    li.style.display = 'flex';
+    li.style.alignItems = 'center';
+    li.style.padding = '0.5rem 0';
+    li.style.cursor = 'pointer';
+    li.style.borderBottom = '1px solid #eee';
+
+    const img = document.createElement('img');
+    img.src = getRandomAvatar();
+    img.alt = "avatar";
+    img.style.width = '32px';
+    img.style.height = '32px';
+    img.style.borderRadius = '50%';
+    img.style.marginRight = '0.75rem';
+
+    const span = document.createElement('span');
+    span.textContent = text;
+
+    li.appendChild(img);
+    li.appendChild(span);
+
+    li.addEventListener('click', () => {
+      input.value = text;
+      suggestionsList.style.display = 'none';
+    });
+
+    return li;
+  }
+
+  function showSuggestions() {
+    const value = input.value.trim();
+    suggestionsList.innerHTML = '';
+
+    if (!value) {
+      suggestionsList.style.display = 'none';
+      return;
+    }
+
+    // Add loader first
+    const loader = document.createElement('div');
+    loader.className = 'loader';
+    loader.innerHTML = '<div class="loader-circle"></div>';
+    suggestionsList.appendChild(loader);
+    suggestionsList.style.display = 'block';
+
+    // Simulate loading delay (like PayPal)
+    setTimeout(() => {
+      suggestionsList.innerHTML = '';
+      suggestionsList.appendChild(createSuggestionItem(value));
+      suggestionsList.appendChild(createSuggestionItem(value + '@gmail.com'));
+      suggestionsList.appendChild(createSuggestionItem(value + '@sendsnap.uk'));
+    }, 500);
+  }
+
+  // Debounce to limit calls while typing
+  let typingTimer;
+  function debouncedSuggestions() {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(showSuggestions, 300);
+  }
+
+  // Hide on outside click
+  document.addEventListener('click', (e) => {
+    if (!suggestionsList.contains(e.target) && e.target !== input) {
+      suggestionsList.style.display = 'none';
+    }
+  });
+</script>
+     <script>
+        const sendButton = document.querySelector('.send-button');
+
+input.addEventListener('input', () => {
+  const trimmedValue = input.value.trim();
+  sendButton.disabled = trimmedValue.length === 0;
+});
+     </script>
+   
+   <script>
+  sendButton.addEventListener('click', () => {
+  // Show loader
+  fullScreenLoader.style.display = 'flex';
+
+  // After 3s, hide loader and show final screen
+  setTimeout(() => {
+    fullScreenLoader.style.display = 'none';
+    document.getElementById('sendMoneyScreen').style.display = 'none';
+    document.getElementById('sendMoneyButtonWrapper').style.display = 'none';
+    document.getElementById('finalScreen').style.display = 'block';
+  }, 3000);
+});
+
+</script>
+<script>
+  const amountInput = document.getElementById('amountInput');
+
+  amountInput.addEventListener('input', (e) => {
+    const cursorPosition = amountInput.selectionStart;
+
+    let value = amountInput.value.replace(/,/g, '').replace(/[^\d.]/g, '');
+
+    // Split into whole and decimal
+    const parts = value.split('.');
+    let whole = parts[0];
+    let decimal = parts[1] || '';
+
+    // Format whole number with commas
+    whole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    // Reconstruct formatted value
+    const formattedValue = decimal ? `${whole}.${decimal}` : whole;
+
+    amountInput.value = formattedValue;
+
+    // Optional: reposition cursor near the end
+    amountInput.setSelectionRange(amountInput.value.length, amountInput.value.length);
+  });
+</script>
+
+
+</body>
+</html>
+
